@@ -17,7 +17,7 @@
     /* Grid properties */
     display: grid;
     grid-template-columns: 200px auto 200px;
-    grid-template-rows: 125px auto;
+    grid-template-rows: 50px auto;
 }
 
 .logoBox
@@ -137,4 +137,74 @@
     /* Parent grid properties */
     grid-column: 2/-1;
     grid-row: 2/-1;
+
+    /* Main flex properties */
+    display: flex;
+    flex-direction: column;
+}
+
+.cardsHeader
+{
+    /* General properties */
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+
+    /* Main flex properties */
+    display: flex;
+}
+
+.cardsHeaderIcon
+{
+    /* Text properties */
+    font-size: 25px;
+}
+
+.cardsHeaderText
+{
+    /* Text properties */
+    font-size: 25px;
+}
+
+.cardsButtons
+{
+    /* General properties */
+    padding: 10px;
+}
+
+.cardsCreateButton
+{
+    /* General properties */
+    padding: 5px;
+    /* Text properties */
+    font-size: 18px;
+    text-align: center;
+
+    /* Border properties */
+    border-style: solid;
+    border-radius: 10px;
+
+    /* Main flex properties */
+    display: flex;
+}
+
+.cardsContent
+{
+    /* General properties */
+    height: 100%;
+    padding: 10px;
+
+    /* Flex properties */
+    display: flex;
+}
+
+.cardsList
+{
+    /* General properties */
+    flex: 1;
+}
+
+.cardsDisplay
+{
+    /* General properties */
 }
