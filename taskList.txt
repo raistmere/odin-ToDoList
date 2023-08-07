@@ -1,0 +1,6 @@
+Goale: For this project I want to focus on what I learned in the pass lessons:
+    1. Apply the "Single Responsibility Principle".
+    2. Avoid "tightly coupled" code. Focused on Loosely coupled strategies.
+
+Tasks:
+    1.
