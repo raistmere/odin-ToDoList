@@ -126,6 +126,11 @@
     width: auto;
     height: 100%;
     padding: 10px;
+
+    /* Flex properties */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .cardsBox
