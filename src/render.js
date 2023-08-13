@@ -9,7 +9,7 @@ const projectListBox = document.querySelector('.projectsListBox');
 
 // Pubsub subscriptions
 pubsub.subscribe("renderProjects", renderProjects);
-pubsub.subscribe("openProject", renderCards);
+pubsub.subscribe("renderCards", renderCards);
 
 
 // This function handles the rendering of the projectlist on the page.
@@ -35,7 +35,7 @@ function renderProjects(projectList)
             // call a pubsub publish for opening the project.
             newElement.addEventListener('click', function(e)
             {
-                pubsub.publish("openProject", null);
+                pubsub.publish("openProject", project.id);
                 console.log(pubsub.calls);
             });
 
@@ -51,7 +51,7 @@ function renderProjects(projectList)
 
 // This function handles the rendering of the cardList on the page.
 // cardList will be the current project's to-do-list lists if that makes sense.
-function renderCards(cardList)
+function renderCards(deck)
 {
-    console.log("render.js 'Action': Rendering cards....");
+    console.log(`render.js 'Action': Rendering cards from deck ${deck}`);
 }

@@ -40,9 +40,17 @@ function createProject(projectName)
     if(typeof projectName === 'string')
     {
         console.log("ProjectManager.js 'Action': Creating project....");
-        projectList.push(projectName);
 
-        // We make sure to converty the new updated projectList to
+        // Generating a quick unique ID using Date.now() + some random-ness. This is a bandaid solution to get everything working.
+        let idNumber = (Math.random().toString(16).slice(2) + Date.now()).toString();
+
+        // Create a new project object
+        let newProject = new Project(projectName, idNumber);
+
+        // We then pass the newProject to the projectList.
+        projectList.push(newProject);
+
+        // We make sure to convert the new updated projectList to
         // our localstorage.
         localStorage.setItem("projectList", JSON.stringify(projectList));
     }
@@ -62,6 +70,13 @@ function createProject(projectName)
 function passToRender()
 {
     pubsub.publish("renderProjects", projectList);
+}
+
+// Quick factory function to create project objects with data properties
+// Currently have project name and a unqiue ID that is given to each project.
+function Project(name, id)
+{
+    return{ name: name, id: id}
 }
 
 
