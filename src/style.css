@@ -104,7 +104,7 @@
     display: flex;
 }
 
-.projectsCreateButton
+.createProjectButton
 {
     /* General properties */
     padding: 5px;
@@ -126,6 +126,7 @@
     width: auto;
     height: 100%;
     padding: 10px;
+    background-color: rgb(143, 255, 255);
 
     /* Flex properties */
     display: flex;
@@ -133,7 +134,7 @@
     gap: 10px;
 }
 
-.cardsBox
+.deckBox
 {
     /* General properties */
     width: auto;
@@ -148,7 +149,7 @@
     flex-direction: column;
 }
 
-.cardsHeader
+.deckHeader
 {
     /* General properties */
     justify-content: center;
@@ -159,25 +160,25 @@
     display: flex;
 }
 
-.cardsHeaderIcon
+.deckHeaderIcon
 {
     /* Text properties */
     font-size: 25px;
 }
 
-.cardsHeaderText
+.deckHeaderText
 {
     /* Text properties */
     font-size: 25px;
 }
 
-.cardsButtons
+.deckButtons
 {
     /* General properties */
     padding: 10px;
 }
 
-.cardsCreateButton
+.createCardButton
 {
     /* General properties */
     padding: 5px;
@@ -193,7 +194,7 @@
     display: flex;
 }
 
-.cardsContent
+.deckContent
 {
     /* General properties */
     height: 100%;
@@ -203,13 +204,17 @@
     display: flex;
 }
 
-.cardsList
+.cardListBox
 {
     /* General properties */
+    background-color: rgb(143, 255, 255);
+
+    /* Parent flex properties */
     flex: 1;
 }
 
-.cardsDisplay
+.deckDisplay
 {
     /* General properties */
+    background-color: rgb(143, 255, 255);
 }

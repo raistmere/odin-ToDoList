@@ -1,42 +1,61 @@
-import pubsub from "./pubsub";
+// import pubsub from "./pubsub";
 
-//
-// This script job is to:
-// Create a deck (The deck holds cards(to-do-list)). Deck represents the whole collection of to-do-list for the project.
-// Each project will have one deck. Each deck will have a set of cards.
+// //
+// // This script job is to:
+// // Create a deck (The deck holds cards(to-do-list)). Deck represents the whole collection of to-do-list for the project.
+// // Each project will have one deck. Each deck will have a set of cards.
 
-// Const variables
-const deckList = []; // Holds all the decks in one list for searching.
+// // Const variables
+// const deckList = []; // Holds all the decks in one list for searching.
+// let currentDeck = null; //Holds the current active deck.
 
-// Pubsub subscriptions
-pubsub.subscribe("openProject", findDeck);
+// // Pubsub subscriptions
+// pubsub.subscribe("openProject", findDeck);
 
-// This function handles searching through the deckList for the correct deck.
-function findDeck(deckID)
-{
-    let foundDeck;
+// function initilization()
+// {
+//     let storageDeck = localStorage.getItem("deckList");
+//     console.log(storageDeck);
 
-    if(deckList.includes(deckID))
-    {
-        console.log("Deck exists already")
+//     console.log(deckList);
+// }
 
-    }
-    else
-    {
-        console.log("Deck does not exist. Creating new deck for project...");
-        deckList.push(deckID);
-        localStorage.setItem("deckList", JSON.stringify(deckList));
-    }
+// // This function handles searching through the deckList for the correct deck.
+// function findDeck(projectID)
+// {
+//     if(deckList.includes(projectID))
+//     {
+//         console.log("Deck exists already")
 
-    foundDeck = deckList.find((element) => element === deckID ? console.log("Deck Found") : null);
+//     }
+//     else
+//     {
+//         console.log("Deck does not exist. Creating new deck for project...");
+//         let newDeck = new Deck(projectID);
+//         deckList.push(newDeck);
+//         localStorage.setItem("deckList", JSON.stringify(deckList));
+//     }
 
-    pubsub.publish("renderCards", foundDeck);
-}
+//     currentDeck = deckList.find((element) => element === projectID ? console.log("Deck Found") : null);
 
+//     pubsub.publish("renderCards", currentDeck);
+// }
 
-// Quick factory function to create a Deck object.
-function Deck(deckID)
-{
-    
-}
+// // This function handles deleting a deck from the deckList when a project is deleted.
+// // pubsub subscription will be required to listen for project deletion.
+// function deleteDeck()
+// {
+
+// }
+
+// // Quick factory function to create a Deck object.
+// function Deck(projectID)
+// {
+//     // This array will contain all the cards(to-do-lists) for the deck.
+//     let cardList = [];
+
+//     return{ projectID: projectID,  cardList: cardList}
+// }
+
+// initilization();
 

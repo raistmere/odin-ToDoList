@@ -8,12 +8,17 @@ import projectManager from './projectManager.js';
 import css from './style.css';
 
 // DOM references
-const projectsCreateButton = document.querySelector('.projectsCreateButton');
+const createProjectButton = document.querySelector('.createProjectButton');
+const createCardButton = document.querySelector('.createCardButton');
 
 
 // Event Listeners
-projectsCreateButton.addEventListener('click', function(e)
+createProjectButton.addEventListener('click', function(e)
 {
     pubsub.publish("createProject", "Project Button");
     console.log(pubsub.calls);
+});
+createCardButton.addEventListener('click', function(e)
+{
+    console.log("Create Card Button Pressed");
 });

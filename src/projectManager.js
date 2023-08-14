@@ -64,6 +64,13 @@ function createProject(projectName)
     passToRender();
 }
 
+// This function handles deleting a project from the projectList
+// Pubsub subcription when the delete project button is clicked
+function deleteProject()
+{
+
+}
+
 
 // This function will pass the current updated data of the projects
 // to the "update projects render" publish event.
