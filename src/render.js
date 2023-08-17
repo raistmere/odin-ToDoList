@@ -36,7 +36,6 @@ function renderProjects(projectList)
             newElement.addEventListener('click', function(e)
             {
                 pubsub.publish("openProject", project.id);
-                console.log(pubsub.calls);
             });
 
             // We finally add the new element to the projectList.
@@ -51,7 +50,23 @@ function renderProjects(projectList)
 
 // This function handles the rendering of the cardList on the page.
 // cardList will be the current project's to-do-list lists if that makes sense.
-function renderCards(deck)
+function renderCards(cardList)
 {
-    console.log(`render.js 'Action': Rendering cards from deck ${deck}`);
+    console.log(`render.js 'Action': Rendering cards from current project`);
+
+    // Check if cardList is an array then go ahead and see if we can render cards.
+    if(Array.isArray(cardList))
+    {
+        if(cardList.length === 0)
+        {
+            console.log("Current project contains no cards");
+        }
+        else
+        {
+            cardList.forEach(element => {
+                console.log(element);
+            });
+        }
+    }
 }
+

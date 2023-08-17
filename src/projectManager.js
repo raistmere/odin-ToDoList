@@ -6,9 +6,12 @@ import pubsub from "./pubsub";
 // Then "Pass to render"
 
 const projectList = [];
+let currentProject = new Project(); // This variable saves the current project id# for lookup
 
 // Pubsub subscriptions
-pubsub.subscribe("createProject", createProject);
+pubsub.subscribe("addProject", addProject);
+pubsub.subscribe("addCard", addCard);
+pubsub.subscribe("openProject", openProject);
 
 
 // This function handles initilization for this script
@@ -24,16 +27,31 @@ function initilization()
             projectList.push(element);
         });
         console.log(projectList);
-        // Call render to update the page with the correct projectList
-        passToRender();
+
+        // Set current project default to project 1
+        // Else create a default project and set current to that
+        if(projectList[0] !== null)
+        {
+            console.log("ProjectList found: Setting default project");
+            currentProject = projectList[0];
+        }
+
+        // Go ahead and do a renderProjects call
+        pubsub.publish("renderProjects", projectList);
+    }
+    else // We go ahead and back a new projectList in localStorage and set the currentProject to default.
+    {
+        console.log("ProjectList not found: Creating default project");
+        addProject("DEFAULT");
+        currentProject = projectList[0];
     }
 }
 
 
-// This function will be subscribed to the "new project create" event
-// It will handle what happens when a new project is created.
+// This function will be subscribed to the "addProject" event call
+// This will handle adding the new project to the projectList.
 // Then this will call render projects function
-function createProject(projectName)
+function addProject(projectName)
 {
     // Want to make sure that a string was passed through
     // the pubsub.
@@ -45,7 +63,7 @@ function createProject(projectName)
         let idNumber = (Math.random().toString(16).slice(2) + Date.now()).toString();
 
         // Create a new project object
-        let newProject = new Project(projectName, idNumber);
+        let newProject = new Project(idNumber, projectName);
 
         // We then pass the newProject to the projectList.
         projectList.push(newProject);
@@ -61,7 +79,48 @@ function createProject(projectName)
 
     console.log(projectList);
 
-    passToRender();
+    // Go ahead and do a renderProjects call
+    pubsub.publish("renderProjects", projectList);
+}
+
+// This function will handle adding a card to the current selected project.
+function addCard(card)
+{
+    console.log(`Card added to ${currentProject.name} with id#${currentProject.id} and card list of ${currentProject.cardList}`);
+    console.log(currentProject.cardList);
+    // Create a new card and add it to the currentProject cardList
+    let newCard = new Card("DEFAULT");
+    currentProject.cardList.push(newCard);
+
+    // Apply changes to the currentProject to the projectList
+    let index = projectList.indexOf(projectList.find((element) => element.id === currentProject.id ? element : null));
+    projectList.splice(index, 1, currentProject);
+    
+    // Save/upload changes to the localStorage.
+    localStorage.setItem("projectList", JSON.stringify(projectList));
+}
+
+// This function handles what happens when the user opens a project 
+// (clicks on the project button)
+function openProject(projectID)
+{
+    console.log(`Opening project id# ${projectID}`);
+
+    // We make sure to set the currenProject to the project we opened.
+    setCurrentProject(projectID);
+    console.log("Current Project:" + currentProject);
+
+    // We call renderCards so we can display the currentProject's cardList
+    pubsub.publish("renderCards", currentProject.cardList);
+}
+
+// This function handles finding a project from the projectList based on projectID.
+// Make sure to convert the data to a project object.
+function setCurrentProject(projectID)
+{
+    console.log(`Finding project: ${projectID} in the projectList.`);
+    currentProject = projectList.find((element) => element.id === projectID ? element : null);
+    console.log(currentProject);
 }
 
 // This function handles deleting a project from the projectList
@@ -71,19 +130,18 @@ function deleteProject()
 
 }
 
-
-// This function will pass the current updated data of the projects
-// to the "update projects render" publish event.
-function passToRender()
-{
-    pubsub.publish("renderProjects", projectList);
-}
-
 // Quick factory function to create project objects with data properties
 // Currently have project name and a unqiue ID that is given to each project.
-function Project(name, id)
+// Starts with a empty cardList array that will contain the cards added to the project.
+function Project(id, name, cardList)
 {
-    return{ name: name, id: id}
+    cardList = [];
+    return { id: id, name: name, cardList: cardList}
+}
+
+function Card(id, title, description)
+{
+    return { id: id, title: title, desc: description}
 }
 
 

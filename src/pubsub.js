@@ -27,7 +27,7 @@ const pubsub = (function()
         // If call exists
         if(this.calls[call])
         {
-            console.log("Calling " + "[" + call + "]");
+            console.log(`Publish Call: "${call}"`);
             this.calls[call].forEach(action => 
             {
                 action(data);
