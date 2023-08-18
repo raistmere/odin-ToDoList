@@ -64,11 +64,11 @@ function addProject(projectName)
     {
         console.log("ProjectManager.js 'Action': Creating project....");
 
-        // Generating a quick unique ID using Date.now() + some random-ness. This is a bandaid solution to get everything working.
-        let idNumber = (Math.random().toString(16).slice(2) + Date.now()).toString();
+        // Generate new id for project
+        let newID = generateID();
 
         // Create a new project object
-        let newProject = new Project(idNumber, projectName);
+        let newProject = new Project(newID, projectName);
 
         // We then pass the newProject to the projectList.
         projectList.push(newProject);
@@ -93,16 +93,17 @@ function addCard(cardName)
 {
     console.log(`Card added to ${currentProject.name} with id#${currentProject.id} and card list of ${currentProject.cardList}`);
     console.log(currentProject.cardList);
+
+    // Generate a new id for the new card
+    let newID = generateID();
+    
     // Create a new card and add it to the currentProject cardList
-    let newCard = new Card(0, cardName, "N/A");
+    let newCard = new Card(newID, cardName, "N/A");
     currentProject.cardList.push(newCard);
 
-    // Apply changes to the currentProject to the projectList
-    let index = projectList.indexOf(projectList.find((element) => element.id === currentProject.id ? element : null));
-    projectList.splice(index, 1, currentProject);
-    
-    // Save/upload changes to the localStorage.
-    localStorage.setItem("projectList", JSON.stringify(projectList));
+    // Update projectList with the new changes to the current project
+    // and save it to local storage
+    updateProjectList();
 
     // Then we go ahead and call renderCards
     pubsub.publish("renderCards", currentProject.cardList);
@@ -153,13 +154,34 @@ function editSelectedCard()
     pubsub.publish("renderEditCardDisplay", selectedCard);
 }
 
+function updateProjectList()
+{
+    // Apply changes to the currentProject to the projectList
+    let index = projectList.indexOf(projectList.find((element) => element.id === currentProject.id ? element : null));
+    projectList.splice(index, 1, currentProject);
+
+    // Save/upload changes to the localStorage.
+    localStorage.setItem("projectList", JSON.stringify(projectList));
+}
+
 // This function handles the changes to the selected card
 // and updates it then saves it to the localstorage.
 function updateCard(data)
 {
     console.log("Applying edit changes to the selected card");
     console.log(`New card title: ${data.get("editCardTitle")}`);
-    
+    selectedCard.title = data.get("editCardTitle");
+    console.log(`Selected card new title: ${selectedCard.title}`);
+
+    // Apply changes to the selectedCard and update the currentProject cardList
+    let index = currentProject.cardList.indexOf(currentProject.cardList.find((element) => element.id === selectedCard.id ? element : null));
+    currentProject.cardList.splice(index, 1, selectedCard);
+
+    // Apply changes to the projectList because we made changes to the current project
+    updateProjectList();
+
+    // Update the render of the current project card list
+    pubsub.publish("renderCards", currentProject.cardList);
 }
 
 // This function handles deleting a project from the projectList
@@ -167,6 +189,14 @@ function updateCard(data)
 function deleteProject()
 {
 
+}
+
+// This function handles generating a basic id for any object that needs it
+function generateID()
+{
+    // Generating a quick unique ID using Date.now() + some random-ness. This is a bandaid solution to get everything working.
+    let idNumber = (Math.random().toString(16).slice(2) + Date.now()).toString();
+    return idNumber;
 }
 
 // Quick factory function to create project objects with data properties
