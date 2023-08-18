@@ -7,12 +7,17 @@ import pubsub from './pubsub.js';
 // DOM references
 const projectListBox = document.querySelector('.projectsListBox');
 const cardListBox = document.querySelector('.cardListBox');
-const cardDisplay = document.querySelector('.cardDisplay');
+const normalCardDisplayBox = document.querySelector('.normalCardDisplayBox');
+const editCardDisplayBox = document.querySelector('.editCardDisplayBox');
+const normCardTitle = document.querySelector('.normCardTitle');
+const editCardTitle = document.querySelector('#editCardTitle');
+
 
 // Pubsub subscriptions
 pubsub.subscribe("renderProjects", renderProjectList);
 pubsub.subscribe("renderCards", renderCardList);
-pubsub.subscribe("renderCardDisplay", renderCardDisplay)
+pubsub.subscribe("renderCardDisplay", renderCardDisplay);
+pubsub.subscribe("renderEditCardDisplay", renderEditCardDisplay);
 
 
 // This function handles the rendering of the projectlist on the page.
@@ -87,8 +92,9 @@ function renderCardList(cardList)
                 // call a pubsub publish for opening the project.
                 newElement.addEventListener('click', function(e)
                 {
-                    console.log("Opening card");
-                    pubsub.publish("renderCardDisplay", card);
+                    console.log(`Card button was clicked. Calling "viewCard".`);
+                    pubsub.publish("viewCard", card);
+                    // pubsub.publish("renderCardDisplay", card);
                 });
 
                 // Append new element to the cardListBox
@@ -103,39 +109,27 @@ function renderCardList(cardList)
 }
 
 // This function handles rendering the selected card to the card display element.
-// It will render all the card information to the card display and allow for
-// the user to edit the contents of the card and save those changes to the card.
+// It will render all the card information to the card display.
 function renderCardDisplay(card)
 {
     console.log(`Rendering "${card.title}" to card display`);
 
-    // Clear the box and re-render the whole list
-    cardDisplay.innerHTML = ' ';
-
-    // Create a new element for the card title
-    let titleElement = document.createElement('div')
-    titleElement.classList.add('cardTitle');
-    titleElement.textContent = card.title;
-
-    // Append to card display element
-    cardDisplay.appendChild(titleElement);
+    normCardTitle.textContent = card.title;
 }
 
 // This function handles rendering the edit form for the currently selected card.
+// This just handles rendering the form and not the editing.
 function renderEditCardDisplay(card)
 {
-    console.log(`Rendering "${card.title}" to card display for editing`);
+    if(card)
+    {
+        console.log(`Rendering "${card.title}" to card display for editing`);
 
-    // Clear the box and re-render the whole list
-    cardDisplay.innerHTML = ' ';
+        editCardTitle.setAttribute('value', card.title);
 
-    // Create a new element for the card title
-    let titleElement = document.createElement('input');
-    titleElement.classList.add('cardTitle')
-    titleElement.setAttribute("type", "text");
-    titleElement.setAttribute("value", card.title);
-
-    // Append to card display element
-    cardDisplay.appendChild(titleElement);
+        // Display editCardDisplay and hide normalCardDisplay
+        editCardDisplayBox.classList.remove('hidden');
+        normalCardDisplayBox.classList.add('hidden');
+    }
 }
 

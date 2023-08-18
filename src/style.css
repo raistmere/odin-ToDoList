@@ -213,16 +213,12 @@
     flex: 1;
 }
 
-.cardButton
-{
-    /* General properties */
-}
-
 .cardDisplay
 {
     /* General properties */
     display: flex;
     flex-direction: column;
+    min-width: 50%;
     padding: 10px;
     background-color: rgb(143, 255, 255);
 }
@@ -236,11 +232,13 @@
     background-color: rgb(165, 139, 192);
 }
 
-.normCardHeader
+.normCardHeader, .editCardHeader
 {
     /* General properties */
     display: flex;
     justify-content: flex-end;
+    gap: 10px;
+    padding: 2px;
 }
 
 .editCardButton
@@ -250,12 +248,23 @@
     background-color: rgb(117, 117, 255);
 }
 
-.normCardTitle
+.applyEditButton
 {
     /* General properties */
+    width: 50px;
+    background-color: rgb(117, 255, 140);
+}
 
-    /* Text properties */
-    font-size: 30px;
+.cancelEditButton
+{
+    /* General properties */
+    width: 50px;
+    background-color: rgb(255, 117, 117);
+}
+
+.normCardTitle
+{
+
 }
 
 

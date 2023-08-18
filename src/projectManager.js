@@ -7,11 +7,15 @@ import pubsub from "./pubsub";
 
 const projectList = [];
 let currentProject = new Project(); // This variable saves the current project id# for lookup
+let selectedCard; //Keeps track of our current selected card.
 
 // Pubsub subscriptions
 pubsub.subscribe("addProject", addProject);
 pubsub.subscribe("addCard", addCard);
 pubsub.subscribe("openProject", openProject);
+pubsub.subscribe("viewCard", viewCard);
+pubsub.subscribe("editCard", editSelectedCard);
+pubsub.subscribe("applyEdit",updateCard);
 
 
 // This function handles initilization for this script
@@ -118,6 +122,18 @@ function openProject(projectID)
     pubsub.publish("renderCards", currentProject.cardList);
 }
 
+// This function handles what happens when the user clicks
+// on a card so they can view it.
+function viewCard(card)
+{
+    console.log(`Viewing card: "${card.title}"`);
+
+    // Make sure that we keep track of what card is currently selected.
+    selectedCard = card;
+
+    pubsub.publish("renderCardDisplay", selectedCard);
+}
+
 // This function handles finding a project from the projectList based on projectID.
 // Make sure to convert the data to a project object.
 function setCurrentProject(projectID)
@@ -125,6 +141,25 @@ function setCurrentProject(projectID)
     console.log(`Finding project: ${projectID} in the projectList.`);
     currentProject = projectList.find((element) => element.id === projectID ? element : null);
     console.log(currentProject);
+}
+
+// This function handles what happens when the user wants to 
+// edit the selected card.
+function editSelectedCard()
+{
+    console.log("Editing the selected card...")
+
+    // Render the edit display
+    pubsub.publish("renderEditCardDisplay", selectedCard);
+}
+
+// This function handles the changes to the selected card
+// and updates it then saves it to the localstorage.
+function updateCard(data)
+{
+    console.log("Applying edit changes to the selected card");
+    console.log(`New card title: ${data.get("editCardTitle")}`);
+    
 }
 
 // This function handles deleting a project from the projectList

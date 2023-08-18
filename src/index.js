@@ -4,7 +4,6 @@
 import pubsub from './pubsub.js'; //pubsub will always be load order -1. Core script that all scripts need for calls.
 /* IMPORTANT*/ import render from './render.js'; //MUST BE AT TOP LOAD ORDER. Problem with rendering localstorage on awake.
 import projectManager from './projectManager.js';
-import createForm from './createForm.js';
 
 // 
 // CSS imports
@@ -16,19 +15,50 @@ import css from './style.css';
 // 
 const createProjectButton = document.querySelector('.createProjectButton');
 const createCardButton = document.querySelector('.createCardButton');
+const editCardButton = document.querySelector('.editCardButton');
+const applyEditButton = document.querySelector('.applyEditButton');
+const editCardForm = document.querySelector('.editCardForm');
+const cancelEditButton = document.querySelector('.cancelEditButton');
 
 // 
 // Event Listeners\\
 // 
-// Creating a new project event
+
+// Create project button
 createProjectButton.addEventListener('click', function(e)
 {
-    console.log("Create project Button Pressed");
+    console.log("Create project button pressed");
     pubsub.publish("addProject", "New Project");
 });
-// Creating a new card event
+// Create card button
 createCardButton.addEventListener('click', function(e)
 {
-    console.log("Create Card Button Pressed");
+    console.log("Create card button pressed");
     pubsub.publish("addCard", "New Card");
 });
+// Edit card Button
+editCardButton.addEventListener('click', function(e)
+{
+    console.log("Editing card button pressed");
+    pubsub.publish("editCard", "Edit Card");
+})
+// Apply Edit Button
+applyEditButton.addEventListener('click', function()
+{
+    console.log("Apply edit button pressed");
+
+    // Grab the form data from editCardForm
+    const data = new FormData(editCardForm);
+
+    // Then use that form data and pass it to the publish call: applyEdit
+    // Those that are subscribed will have the form data now.
+    pubsub.publish("applyEdit", data);
+})
+// Cancel Edit Button
+cancelEditButton.addEventListener('click', function(e)
+{
+    console.log("Cancel edit button pressed");
+    pubsub.publish("cancelEdit", "Cancel Edit");
+})
+
+
