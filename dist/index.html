@@ -8,6 +8,7 @@
     <script src="./bundle.js" defer></script>
 </head>
 <body>
+    <!-- MAIN WRAPPER FOR APP -->
     <div id="wrapper">
         <div class="logoBox">Logo</div>
         <div class="searchBox">Search</div>
@@ -44,11 +45,26 @@
                 <div class="cardListBox">
                 </div>
                 <!-- This will be the container that will show the to-do-list -->
-                <div class="deckDisplay">
-                    Display
+                <div class="cardDisplay">
+                    <!-- This will be the default display of the card where there is no editing except for checklist-->
+                    <div class="normalCardDisplayBox hidden">
+                        <div class="normCardHeader">
+                            <button class="editCardButton">[Edit]</button>
+                        </div>
+                        <div class="normCardTitle">Card Title</div>
+                        <div class="normCardDesc">Card Description</div>
+                    </div>
+                    <!-- This container will hold the editing form that allows the user to update the card -->
+                    <div class="editCardDisplayBox">
+                        <form action="" class="editDisplayForm">
+                            <label for="editCardTitle">Card Title</label>
+                            <input type="text" id="editCardTitle" name="editCardTitle">
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+        
 </body>
 </html>

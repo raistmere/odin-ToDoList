@@ -213,8 +213,54 @@
     flex: 1;
 }
 
-.deckDisplay
+.cardButton
 {
     /* General properties */
+}
+
+.cardDisplay
+{
+    /* General properties */
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
     background-color: rgb(143, 255, 255);
+}
+
+.normalCardDisplayBox, .editCardDisplayBox
+{
+    /* General properties */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: rgb(165, 139, 192);
+}
+
+.normCardHeader
+{
+    /* General properties */
+    display: flex;
+    justify-content: flex-end;
+}
+
+.editCardButton
+{
+    /* General properties */
+    width: 50px;
+    background-color: rgb(117, 117, 255);
+}
+
+.normCardTitle
+{
+    /* General properties */
+
+    /* Text properties */
+    font-size: 30px;
+}
+
+
+/* SUPPORT CSS */
+.hidden
+{
+    display: none;
 }

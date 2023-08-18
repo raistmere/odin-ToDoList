@@ -42,7 +42,7 @@ function initilization()
     else // We go ahead and back a new projectList in localStorage and set the currentProject to default.
     {
         console.log("ProjectList not found: Creating default project");
-        addProject("DEFAULT");
+        addProject("New Project");
         currentProject = projectList[0];
     }
 }
@@ -50,6 +50,7 @@ function initilization()
 
 // This function will be subscribed to the "addProject" event call
 // This will handle adding the new project to the projectList.
+// The project will create a default "New Project".
 // Then this will call render projects function
 function addProject(projectName)
 {
@@ -84,12 +85,12 @@ function addProject(projectName)
 }
 
 // This function will handle adding a card to the current selected project.
-function addCard(card)
+function addCard(cardName)
 {
     console.log(`Card added to ${currentProject.name} with id#${currentProject.id} and card list of ${currentProject.cardList}`);
     console.log(currentProject.cardList);
     // Create a new card and add it to the currentProject cardList
-    let newCard = new Card("DEFAULT");
+    let newCard = new Card(0, cardName, "N/A");
     currentProject.cardList.push(newCard);
 
     // Apply changes to the currentProject to the projectList
@@ -98,6 +99,9 @@ function addCard(card)
     
     // Save/upload changes to the localStorage.
     localStorage.setItem("projectList", JSON.stringify(projectList));
+
+    // Then we go ahead and call renderCards
+    pubsub.publish("renderCards", currentProject.cardList);
 }
 
 // This function handles what happens when the user opens a project 
