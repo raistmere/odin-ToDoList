@@ -53,12 +53,20 @@ applyEditButton.addEventListener('click', function()
     // Then use that form data and pass it to the publish call: applyEdit
     // Those that are subscribed will have the form data now.
     pubsub.publish("applyEdit", data);
+
+    // After everything is done, we want to make sure that we reset the form.
+    // If we don't, there is a bug where the old values remain when editing a new card. 
+    // It's weird but reset() fixes that.
+    editCardForm.reset();
 })
 // Cancel Edit Button
 cancelEditButton.addEventListener('click', function(e)
 {
     console.log("Cancel edit button pressed");
-    pubsub.publish("cancelEdit", "Cancel Edit");
+    // We use the viewCard call so we can just refresh the card display
+    // with the current selected card. We pass the null so we make sure that we don't want
+    // to view a new card but rather view the existing selected card.
+    pubsub.publish("viewCard", null);
 })
 
 

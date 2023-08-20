@@ -98,7 +98,9 @@ function addCard(cardName)
     let newID = generateID();
     
     // Create a new card and add it to the currentProject cardList
-    let newCard = new Card(newID, cardName, "N/A");
+    let newCard = new Card(newID, cardName, "N/A", "0/0/00", "Low");
+    newCard.checkList.push({state: 0, text: "Clean your room now!"});
+    newCard.checkList.push({state: 1, text: "Clean your car now!"});
     currentProject.cardList.push(newCard);
 
     // Update projectList with the new changes to the current project
@@ -127,10 +129,14 @@ function openProject(projectID)
 // on a card so they can view it.
 function viewCard(card)
 {
-    console.log(`Viewing card: "${card.title}"`);
-
-    // Make sure that we keep track of what card is currently selected.
-    selectedCard = card;
+    // We check to see if a new card was passed. If not then we must want
+    // to view the existing selectedCard.
+    if(card !== null)
+    {
+        console.log(`Viewing card: "${card.title}"`);
+            // Make sure that we keep track of what card is currently selected.
+        selectedCard = card;
+    }
 
     pubsub.publish("renderCardDisplay", selectedCard);
 }
@@ -148,10 +154,13 @@ function setCurrentProject(projectID)
 // edit the selected card.
 function editSelectedCard()
 {
-    console.log("Editing the selected card...")
-
-    // Render the edit display
-    pubsub.publish("renderEditCardDisplay", selectedCard);
+    if(selectedCard)
+    {
+        console.log(`Editing the selected card ${selectedCard.title}`);
+    
+        // Render the edit display
+        pubsub.publish("renderEditCardDisplay", selectedCard);
+    }
 }
 
 function updateProjectList()
@@ -170,8 +179,12 @@ function updateCard(data)
 {
     console.log("Applying edit changes to the selected card");
     console.log(`New card title: ${data.get("editCardTitle")}`);
+
+    // We make sure to apply the new changes to the selectedCard
     selectedCard.title = data.get("editCardTitle");
-    console.log(`Selected card new title: ${selectedCard.title}`);
+    selectedCard.desc = data.get("editCardDesc");
+    selectedCard.due = data.get("editCardDue");
+    selectedCard.priority = data.get("editCardPriority");
 
     // Apply changes to the selectedCard and update the currentProject cardList
     let index = currentProject.cardList.indexOf(currentProject.cardList.find((element) => element.id === selectedCard.id ? element : null));
@@ -181,7 +194,9 @@ function updateCard(data)
     updateProjectList();
 
     // Update the render of the current project card list
+    // Update the card display with the new updated card data.
     pubsub.publish("renderCards", currentProject.cardList);
+    pubsub.publish("renderCardDisplay", selectedCard);
 }
 
 // This function handles deleting a project from the projectList
@@ -208,9 +223,14 @@ function Project(id, name, cardList)
     return { id: id, name: name, cardList: cardList}
 }
 
-function Card(id, title, description)
+// Quick factory function that will create card objects to be stored in projects
+// and localStorage.
+function Card(id, title, description, due, priority)
 {
-    return { id: id, title: title, desc: description}
+    //This array will store an object that will represent a checkbox properties like
+    // have check state and the text description.
+    let checkList = []; // ex: {state: 0, text: "Clean your room"}
+    return { id: id, title: title, desc: description, due: due, priority: priority, checkList: checkList}
 }
 
 

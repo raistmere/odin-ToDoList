@@ -52,7 +52,17 @@
                             <button class="editCardButton">[Edit]</button>
                         </div>
                         <div class="normCardTitle">Card Title</div>
-                        <!-- <div class="normCardDesc">Card Description</div> -->
+                        <div class="normCardDesc">Card Description</div>
+                        <div class="normCardDue">Card Due Date</div>
+                        <div class="normCardPriority">Card Priority</div>
+                        <div class="normCardNotes">Card Notes</div>
+                        <fieldset class="normCardChecklist">
+                            <legend>TO-DO-LIST</legend>
+                            <!-- <div class="checkbox">
+                                <input type="checkbox" id="cb1" checked>
+                                <label for="cb1">Clean your room</label>
+                            </div> -->
+                        </fieldset>
                     </div>
                     <!-- This container will hold the editing form that allows the user to update the card -->
                     <div class="editCardDisplayBox hidden">
@@ -61,8 +71,20 @@
                                 <button type="button" class="applyEditButton">[Apply]</button>
                                 <button type="button" class="cancelEditButton">[Cancel]</button>
                             </div>
-                            <label for="editCardTitle">Card Title</label>
-                            <input type="text" id="editCardTitle" name="editCardTitle" value="Hello">
+                            <label for="editCardTitle">Card Title:</label>
+                            <input type="text" id="editCardTitle" name="editCardTitle">
+                            <label for="editCardDesc">Card Description:</label>
+                            <input type="text" id="editCardDesc" name="editCardDesc">
+                            <label for="editCardDue">Card Due Date:</label>
+                            <input type="text" id="editCardDue" name="editCardDue">
+                            <label for="editCardPriority">Card Priority:</label>
+                            <select name="editCardPriority" id="editCardPriority">
+                                <option value="Low" selected="selected">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+
+
                         </form>
                     </div>
                 </div>
