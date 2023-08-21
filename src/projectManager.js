@@ -15,7 +15,8 @@ pubsub.subscribe("addCard", addCard);
 pubsub.subscribe("openProject", openProject);
 pubsub.subscribe("viewCard", viewCard);
 pubsub.subscribe("editCard", editSelectedCard);
-pubsub.subscribe("applyEdit",updateCard);
+pubsub.subscribe("applyEdit",applyCardEdit);
+pubsub.subscribe("applyChecklistChange", applyChecklistChange);
 
 
 // This function handles initilization for this script
@@ -99,8 +100,6 @@ function addCard(cardName)
     
     // Create a new card and add it to the currentProject cardList
     let newCard = new Card(newID, cardName, "N/A", "0/0/00", "Low");
-    newCard.checkList.push({state: 0, text: "Clean your room now!"});
-    newCard.checkList.push({state: 1, text: "Clean your car now!"});
     currentProject.cardList.push(newCard);
 
     // Update projectList with the new changes to the current project
@@ -175,7 +174,7 @@ function updateProjectList()
 
 // This function handles the changes to the selected card
 // and updates it then saves it to the localstorage.
-function updateCard(data)
+function applyCardEdit(data)
 {
     console.log("Applying edit changes to the selected card");
     console.log(`New card title: ${data.get("editCardTitle")}`);
@@ -197,6 +196,19 @@ function updateCard(data)
     // Update the card display with the new updated card data.
     pubsub.publish("renderCards", currentProject.cardList);
     pubsub.publish("renderCardDisplay", selectedCard);
+}
+
+// This function handles the changes made to the checklist of a card.
+// This makes sure that update the correct state for each checklist element that changed.
+function applyChecklistChange(data)
+{
+    console.log(`Applying checklist changes to card ${data.id}`);
+    // Apply changes to the selectedCard and update the currentProject cardList
+    let index = currentProject.cardList.indexOf(currentProject.cardList.find((element) => element.id === selectedCard.id ? element : null));
+    currentProject.cardList.splice(index, 1, selectedCard);
+
+    // Apply changes to the projectList because we made changes to the current project
+    updateProjectList();
 }
 
 // This function handles deleting a project from the projectList

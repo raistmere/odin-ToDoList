@@ -132,11 +132,11 @@ function renderCardDisplay(card)
     // Render card priority to the display
     normCardPriority.textContent = card.priority;
 
-    // Render card checklist to the display
     // Before we begin, we will clear the checklist to prevent any duplicates.
     // or elements that aren't suppose to be in the checklist.
     normCardChecklist.innerHTML = "";
-    for(let i = 0; i < 3; i++)
+    // Render card checklist to the display
+    for(let i = 0; i < card.checkList.length; i++)
     {
         // We make sure to go through the checklist array and create a new checkbox
         // for each element in the array till we have the full checklist in the display.
@@ -148,18 +148,28 @@ function renderCardDisplay(card)
         // Create a new checkbox input element
         let newCheckbox = document.createElement('input');
         newCheckbox.setAttribute('type', 'checkbox');
-        newCheckbox.setAttribute('id',"cb1");
-        newCheckbox.checked = 1;
+        newCheckbox.setAttribute('id',`cb${i+1}`);
+        newCheckbox.checked = card.checkList[i].state;
+        // Make sure to add an eventlistener when there is a change in the checkbox
+        newCheckbox.addEventListener('click', function(e)
+        {
+            console.log(`checkbox ${newCheckbox.getAttribute('id')} state has changed`);
+            console.log(card.checkList[i].state);
+            card.checkList[i].state === 0 ? card.checkList[i].state = 1 : card.checkList[i].state = 0;
+            console.log(card.checkList[i].state);
 
-        // Create a new text element
+            // Pubsub call when this happens to update the card checklist.
+            pubsub.publish("applyChecklistChange", card);
+        })
+        // Create a new label for that checkbox input element
         let newText = document.createElement('label');
-        newText.setAttribute('for', "cb1");
-        newText.textContent = "Clean your car";
+        newText.setAttribute('for', `cb${i+1}`);
+        newText.textContent = card.checkList[i].text;
 
         // Append both checkbox element and text element to div
         newDiv.appendChild(newCheckbox);
         newDiv.appendChild(newText);
-        
+
         // Append the div to the checklist element
         normCardChecklist.appendChild(newDiv);
     }
