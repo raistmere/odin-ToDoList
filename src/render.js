@@ -18,6 +18,7 @@ const editCardTitle = document.querySelector('#editCardTitle');
 const editCardDesc = document.querySelector('#editCardDesc');
 const editCardDue = document.querySelector('#editCardDue');
 const editCardPriority = document.querySelector('#editCardPriority');
+const editCardChecklist = document.querySelector('.editCardChecklist');
 
 // Pubsub subscriptions
 pubsub.subscribe("renderProjects", renderProjectList);
@@ -150,6 +151,7 @@ function renderCardDisplay(card)
         newCheckbox.setAttribute('type', 'checkbox');
         newCheckbox.setAttribute('id',`cb${i+1}`);
         newCheckbox.checked = card.checkList[i].state;
+
         // Make sure to add an eventlistener when there is a change in the checkbox
         newCheckbox.addEventListener('click', function(e)
         {
@@ -161,6 +163,7 @@ function renderCardDisplay(card)
             // Pubsub call when this happens to update the card checklist.
             pubsub.publish("applyChecklistChange", card);
         })
+
         // Create a new label for that checkbox input element
         let newText = document.createElement('label');
         newText.setAttribute('for', `cb${i+1}`);
@@ -206,6 +209,30 @@ function renderEditCardDisplay(card)
                 editCardPriority.selectedIndex = index;
             }
         }
+
+        // This lets us change the label text for each checkbox in the checklist
+        // by converting all the labels into input type text elements.
+        // First we clear the editCardChecklist div element so we don't run into duplicates
+        editCardChecklist.innerHTML = "";
+        for(let i = 0; i < card.checkList.length; i++)
+        {
+            // Create a new element that will represent the checkbox label for editing
+            let newElement = document.createElement('input');
+            newElement.classList.add('editCheckbox');
+            newElement.setAttribute("id", `editCheckbox${i}`);
+            newElement.setAttribute("name", `editCheckbox${i}`);
+            newElement.value = card.checkList[i].text;
+
+            // Create a new label for that text input element
+            let newText = document.createElement('label');
+            newText.setAttribute('for', `editCheckbox${i}`);
+            newText.textContent = `Checkbox #${i+1}`;
+
+            // Append it to the editCardChecklist for display
+            editCardChecklist.appendChild(newText);
+            editCardChecklist.appendChild(newElement);
+        }
+
 
         // Display editCardDisplay and hide normalCardDisplay
         editCardDisplayBox.classList.remove('hidden');

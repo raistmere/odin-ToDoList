@@ -180,10 +180,24 @@ function applyCardEdit(data)
     console.log(`New card title: ${data.get("editCardTitle")}`);
 
     // We make sure to apply the new changes to the selectedCard
+    // Apply Card title changes
     selectedCard.title = data.get("editCardTitle");
+    // Apply Card description changes
     selectedCard.desc = data.get("editCardDesc");
+    // Apply Card due date changes
     selectedCard.due = data.get("editCardDue");
+    // Apply Card priority changes
     selectedCard.priority = data.get("editCardPriority");
+    // Apply Card checklist changes
+    for(const element of data)
+    {
+        console.log(element);
+    }
+    for(let i = 0; i < selectedCard.checkList.length; i++)
+    {
+        selectedCard.checkList[i].text = data.get(`editCheckbox${i}`);
+    }
+
 
     // Apply changes to the selectedCard and update the currentProject cardList
     let index = currentProject.cardList.indexOf(currentProject.cardList.find((element) => element.id === selectedCard.id ? element : null));
