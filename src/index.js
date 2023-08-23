@@ -19,6 +19,7 @@ const editCardButton = document.querySelector('.editCardButton');
 const applyEditButton = document.querySelector('.applyEditButton');
 const editCardForm = document.querySelector('.editCardForm');
 const cancelEditButton = document.querySelector('.cancelEditButton');
+const newCheckboxButton = document.querySelector('.newCheckboxButton');
 
 // 
 // Event Listeners\\
@@ -67,6 +68,16 @@ cancelEditButton.addEventListener('click', function(e)
     // with the current selected card. We pass the null so we make sure that we don't want
     // to view a new card but rather view the existing selected card.
     pubsub.publish("viewCard", null);
+})
+newCheckboxButton.addEventListener('click', function(e)
+{
+    console.log("New checkbox button pressed");
+
+    pubsub.publish("renderNewCheckbox", null);
+    
+
+    // // Pubsub call that will let us add a new checkbox
+    // pubsub.publish("addCheckbox", null);
 })
 
 

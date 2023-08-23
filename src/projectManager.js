@@ -17,6 +17,7 @@ pubsub.subscribe("viewCard", viewCard);
 pubsub.subscribe("editCard", editSelectedCard);
 pubsub.subscribe("applyEdit",applyCardEdit);
 pubsub.subscribe("applyChecklistChange", applyChecklistChange);
+pubsub.subscribe("addCheckbox", addCheckbox);
 
 
 // This function handles initilization for this script
@@ -110,6 +111,22 @@ function addCard(cardName)
     pubsub.publish("renderCards", currentProject.cardList);
 }
 
+// This function will handle adding a new checkbox to the selected card checklist
+function addCheckbox()
+{
+    // console.log("Adding new checkbox to checklist");
+
+    // // Add a new checkbox item to the selectCard checkList
+    // selectedCard.checkList.push({state: 0, text: "Test"});
+
+    // // Update the currentProject cardList with the selectCard changes
+    // let index = currentProject.cardList.indexOf(currentProject.cardList.find((element) => element.id === selectedCard.id ? element : null));
+    // currentProject.cardList.splice(index, 1, selectedCard);
+
+    // // Update projectlist with new changes
+    // updateProjectList();
+}
+
 // This function handles what happens when the user opens a project 
 // (clicks on the project button)
 function openProject(projectID)
@@ -193,9 +210,16 @@ function applyCardEdit(data)
     {
         console.log(element);
     }
-    for(let i = 0; i < selectedCard.checkList.length; i++)
+    for(let i = 0; i < Number(data.get("checklistCount")); i++)
     {
-        selectedCard.checkList[i].text = data.get(`editCheckbox${i}`);
+        if(selectedCard.checkList[i])
+        {
+            selectedCard.checkList[i].text = data.get(`editCheckbox${i}`);
+        }
+        else
+        {
+            selectedCard.checkList.push({state: 0, text: data.get(`editCheckbox${i}`)});
+        }
     }
 
 

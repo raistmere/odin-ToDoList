@@ -19,12 +19,14 @@ const editCardDesc = document.querySelector('#editCardDesc');
 const editCardDue = document.querySelector('#editCardDue');
 const editCardPriority = document.querySelector('#editCardPriority');
 const editCardChecklist = document.querySelector('.editCardChecklist');
+const editCardChecklistCount = document.querySelector('.checklistCount');
 
 // Pubsub subscriptions
 pubsub.subscribe("renderProjects", renderProjectList);
 pubsub.subscribe("renderCards", renderCardList);
 pubsub.subscribe("renderCardDisplay", renderCardDisplay);
 pubsub.subscribe("renderEditCardDisplay", renderEditCardDisplay);
+pubsub.subscribe("renderNewCheckbox", renderNewCheckbox);
 
 
 // This function handles the rendering of the projectlist on the page.
@@ -88,7 +90,6 @@ function renderCardList(cardList)
 
                 // Debug console
                 console.log("Rendering card:")
-                console.log(card);
 
                 // Create a new card element
                 let newElement = document.createElement('button');
@@ -113,6 +114,36 @@ function renderCardList(cardList)
     {
         console.log("ERROR: cardList is not of type 'Array'");
     }
+}
+
+// This function handles rendering a new checkbox to the checklist when editCardDisplay
+// is open. It would have to be because only the +new checkbox button would be able to call this function
+// We want to make sure that the apply changes is the only way for the user to change cards.
+// This function will render a new checkbox element to the editCardDisplay but will not save the changes
+function renderNewCheckbox()
+{
+    // Get the last checkbox number and divide by 2 (because of label and input element)
+    // We want to use this number so we can create id/name with the correct checkbox#
+    let i = (editCardChecklist.childElementCount / 2);
+
+    // Create a new element that will represent the checkbox label for editing
+    let newElement = document.createElement('input');
+    newElement.classList.add('editCheckbox');
+    newElement.setAttribute("id", `editCheckbox${i}`);
+    newElement.setAttribute("name", `editCheckbox${i}`);
+
+    // Create a new label for that text input element
+    let newText = document.createElement('label');
+    newText.setAttribute('for', `editCheckbox${i}`);
+    newText.textContent = `Checkbox #${i+1}`;
+
+    // Append it to the editCardChecklist for display
+    editCardChecklist.appendChild(newText);
+    editCardChecklist.appendChild(newElement);
+
+    // Make sure we update the hidden element checklistCount to keep track of
+    // the new total of elements in the checklist. We go ahead and just add 1 to the total.
+    editCardChecklistCount.setAttribute('value', (Number(editCardChecklistCount.getAttribute('value')) + 1));
 }
 
 // This function handles rendering the selected card to the card display element.
@@ -214,6 +245,8 @@ function renderEditCardDisplay(card)
         // by converting all the labels into input type text elements.
         // First we clear the editCardChecklist div element so we don't run into duplicates
         editCardChecklist.innerHTML = "";
+        // This keeps track of how many checkboxes we have and later used to store in formDat by checklistCount.
+        let checklistCount = 0;
         for(let i = 0; i < card.checkList.length; i++)
         {
             // Create a new element that will represent the checkbox label for editing
@@ -231,7 +264,13 @@ function renderEditCardDisplay(card)
             // Append it to the editCardChecklist for display
             editCardChecklist.appendChild(newText);
             editCardChecklist.appendChild(newElement);
+
+            // Add to checkbox count
+            checklistCount++;
         }
+
+        // Apply the value to the hidden checklistCount element for formData.
+        editCardChecklistCount.setAttribute('value', checklistCount);
 
 
         // Display editCardDisplay and hide normalCardDisplay

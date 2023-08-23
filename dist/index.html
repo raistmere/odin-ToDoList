@@ -83,9 +83,14 @@
                                 <option value="Medium">Medium</option>
                                 <option value="High">High</option>
                             </select>
-                            <div class="editCardChecklist">
-                                
-                            </div>
+                            <!-- This holds all the checkbox items for the checklist (Dynamic child list) -->
+                            <div class="editCardChecklist"></div> 
+                            <!-- This button adds a new checkbox item for the checklist -->
+                            <button type="button" class="newCheckboxButton">[+New Checkbox]</button>
+                            <!-- This hidden input element will keep track of how many checkbox items we have in the checklist so we can pass the data -->
+                            <!-- The reason I am using this is so I can have the user be able to add new checkboxes/delete them and -->
+                            <!-- only effect the checklist when the user clicks on apply. This element value will be passed to the formData to be used. -->
+                            <input type="hidden" class="checklistCount" name="checklistCount" value="0">
                         </form>
                     </div>
                 </div>
