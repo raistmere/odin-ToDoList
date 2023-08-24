@@ -6,6 +6,9 @@ import pubsub from './pubsub.js';
 
 // DOM references
 const projectListBox = document.querySelector('.projectsListBox');
+const projectBoxHeader = document.querySelector('.projectBoxHeader');
+const editProjectBoxHeader = document.querySelector('.editProjectBoxHeader');
+const projectBoxTitle = document.querySelector('.projectBoxHeaderText');
 const cardListBox = document.querySelector('.cardListBox');
 const normalCardDisplayBox = document.querySelector('.normalCardDisplayBox');
 const editCardDisplayBox = document.querySelector('.editCardDisplayBox');
@@ -20,6 +23,8 @@ const editCardDue = document.querySelector('#editCardDue');
 const editCardPriority = document.querySelector('#editCardPriority');
 const editCardChecklist = document.querySelector('.editCardChecklist');
 const editCardChecklistCount = document.querySelector('.checklistCount');
+const editProjectHeaderInput = document.querySelector('#editProjectHeaderInput');
+const projectBoxHeaderText = document.querySelector('.projectBoxHeaderText');
 
 // Pubsub subscriptions
 pubsub.subscribe("renderProjects", renderProjectList);
@@ -27,6 +32,8 @@ pubsub.subscribe("renderCards", renderCardList);
 pubsub.subscribe("renderCardDisplay", renderCardDisplay);
 pubsub.subscribe("renderEditCardDisplay", renderEditCardDisplay);
 pubsub.subscribe("renderNewCheckbox", renderNewCheckbox);
+pubsub.subscribe("renderEditProjectHeader", renderEditProjectHeader);
+pubsub.subscribe("renderProjectHeader", renderProjectHeader);
 
 
 // This function handles the rendering of the projectlist on the page.
@@ -56,6 +63,7 @@ function renderProjectList(projectList)
             newElement.addEventListener('click', function(e)
             {
                 pubsub.publish("openProject", project.id);
+                projectBoxTitle.textContent = project.name;
             });
 
             // We finally add the new element to the projectList.
@@ -329,5 +337,32 @@ function renderEditCardDisplay(card)
         editCardDisplayBox.classList.remove('hidden');
         normalCardDisplayBox.classList.add('hidden');
     }
+}
+
+// This function handles rendering the project header element
+function renderProjectHeader(projectName)
+{
+    console.log("Rendering projectHeader elements");
+
+    // Make sure the project header text matches the current selected project name
+    projectBoxHeaderText.textContent = projectName;
+
+    // Display projectBoxHeader and hide editProjectHeader
+    projectBoxHeader.classList.remove('hidden');
+    editProjectBoxHeader.classList.add('hidden');
+}
+
+// This function handles rendering the edit project header elements so the user
+// can edit the header. Currently header just has the project name but there can possibly be
+// a way to edit the project icon for example. 
+function renderEditProjectHeader(projectName)
+{
+    console.log("Rendering editProjectHeader elements")
+    editProjectHeaderInput.setAttribute('value', projectName);
+
+
+    // Display editProjectHeader and hide projectBoxHeader
+    editProjectBoxHeader.classList.remove('hidden');
+    projectBoxHeader.classList.add('hidden');
 }
 

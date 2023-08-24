@@ -53,7 +53,7 @@
     grid-row: 1/2;
 }
 
-.projectsBox
+.projectListBox
 {
     /* General properties */
     width: auto;
@@ -68,7 +68,7 @@
     flex-direction: column;
 }
 
-.projectsHeader
+.projectListHeader
 {
     /* General properties */
     justify-content: center;
@@ -78,7 +78,7 @@
     display: flex;
 }
 
-.projectsHeaderIcon
+.projectListHeaderIcon
 {
     /* Text properties */
     font-size: 25px;
@@ -88,13 +88,13 @@
     width: 25px;
 }
 
-.projectsHeaderText
+.projectListHeaderText
 {
     /* Text properties */
     font-size: 25px;
 }
 
-.projectsCreateBox
+.projectListCreateBox
 {
     /* General properties */
     justify-content: center;
@@ -134,7 +134,7 @@
     gap: 10px;
 }
 
-.deckBox
+.projectBox
 {
     /* General properties */
     width: auto;
@@ -149,7 +149,7 @@
     flex-direction: column;
 }
 
-.deckHeader
+.projectBoxHeader, .editProjectBoxHeader
 {
     /* General properties */
     justify-content: center;
@@ -160,13 +160,13 @@
     display: flex;
 }
 
-.deckHeaderIcon
+.projectBoxHeaderIcon
 {
     /* Text properties */
     font-size: 25px;
 }
 
-.deckHeaderText
+.projectBoxHeaderText, .editProjectHeaderLabel
 {
     /* Text properties */
     font-size: 25px;

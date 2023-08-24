@@ -14,11 +14,11 @@
         <div class="searchBox">Search</div>
         <div class="accountBox">Account</div>
         <div class="projectsBox">
-            <div class="projectsHeader">
-                <div class="projectsHeaderIcon">[ ]</div>
-                <div class="projectsHeaderText">My Projects</div>
+            <div class="projectListHeader">
+                <div class="projectListHeaderIcon">[ ]</div>
+                <div class="projectListHeaderText">My Projects</div>
             </div>
-            <div class="projectsCreateBox">
+            <div class="projectListCreateBox">
                 <button class="createProjectButton">
                     <div class="buttonIcon">[ ]</div>
                     <div class="buttonText">Create Project</div>
@@ -29,10 +29,23 @@
                 
             </div>
         </div>
-        <div class="deckBox">
-            <div class="deckHeader">
-                <div class="deckHeaderIcon">[ ]</div>
-                <div class="deckHeaderText">My To-Do-Lists</div>
+        <div class="projectBox">
+            <!-- This is the selected project header -->
+            <div class="projectBoxHeader">
+                <div class="projectBoxHeaderIcon">[ ]</div>
+                <div class="projectBoxHeaderText">My To-Do-Lists</div>
+                <button class="editProjectHeaderButton">[Edit]</button>
+            </div>
+            <!-- This allows for editing the selected project header -->
+            <div class="editProjectBoxHeader hidden">
+                <form action="" class="editProjectBoxHeaderForm">
+                    <div class="editProjectHeaderButtons">
+                        <button type="button" class="applyEditProjectHeaderButton">[Apply]</button>
+                        <button type="button" class="cancelEditProjectHeaderButton">[Cancel]</button>
+                    </div>
+                    <label class="editProjectHeaderLabel" for="editProjectHeaderInput">Project Name</label>
+                    <input type="text" name="editProjectHeaderInput" id="editProjectHeaderInput">
+                </form>
             </div>
             <div class="deckButtons">
                 <button class="createCardButton">

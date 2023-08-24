@@ -14,12 +14,15 @@ import css from './style.css';
 // DOM references
 // 
 const createProjectButton = document.querySelector('.createProjectButton');
+const editProjectHeaderButton = document.querySelector('.editProjectHeaderButton');
 const createCardButton = document.querySelector('.createCardButton');
 const editCardButton = document.querySelector('.editCardButton');
 const applyEditButton = document.querySelector('.applyEditButton');
 const editCardForm = document.querySelector('.editCardForm');
 const cancelEditButton = document.querySelector('.cancelEditButton');
 const newCheckboxButton = document.querySelector('.newCheckboxButton');
+const applyEditProjectHeaderButton = document.querySelector('.applyEditProjectHeaderButton');
+const editProjectBoxHeaderForm = document.querySelector('.editProjectBoxHeaderForm');
 
 // 
 // Event Listeners\\
@@ -30,6 +33,12 @@ createProjectButton.addEventListener('click', function(e)
 {
     console.log("Create project button pressed");
     pubsub.publish("addProject", "New Project");
+});
+// Edit selected project header
+editProjectHeaderButton.addEventListener('click', function(e)
+{
+    console.log("Edit project header button pressed");
+    pubsub.publish("editProjectHeader", null);
 });
 // Create card button
 createCardButton.addEventListener('click', function(e)
@@ -74,10 +83,14 @@ newCheckboxButton.addEventListener('click', function(e)
     console.log("New checkbox button pressed");
 
     pubsub.publish("renderNewCheckbox", null);
-    
-
-    // // Pubsub call that will let us add a new checkbox
-    // pubsub.publish("addCheckbox", null);
 })
+applyEditProjectHeaderButton.addEventListener('click', function(e)
+{
+    console.log("applyEditProjectHeaderButton pressed");
+
+    const data = new FormData(editProjectBoxHeaderForm);
+
+    pubsub.publish("applyProjectHeaderEdit", data);
+});
 
 

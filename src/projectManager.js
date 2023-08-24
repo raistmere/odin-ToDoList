@@ -6,7 +6,7 @@ import pubsub from "./pubsub";
 // Then "Pass to render"
 
 const projectList = [];
-let currentProject = new Project(); // This variable saves the current project id# for lookup
+let selectedProject = new Project(); // This variable saves the current project id# for lookup
 let selectedCard; //Keeps track of our current selected card.
 
 // Pubsub subscriptions
@@ -17,7 +17,8 @@ pubsub.subscribe("viewCard", viewCard);
 pubsub.subscribe("editCard", editSelectedCard);
 pubsub.subscribe("applyEdit",applyCardEdit);
 pubsub.subscribe("applyChecklistChange", applyChecklistChange);
-pubsub.subscribe("addCheckbox", addCheckbox);
+pubsub.subscribe("editProjectHeader", editProjectHeader);
+pubsub.subscribe("applyProjectHeaderEdit", applyProjectHeaderChange);
 
 
 // This function handles initilization for this script
@@ -39,7 +40,7 @@ function initilization()
         if(projectList[0] !== null)
         {
             console.log("ProjectList found: Setting default project");
-            currentProject = projectList[0];
+            selectedProject = projectList[0];
         }
 
         // Go ahead and do a renderProjects call
@@ -49,7 +50,7 @@ function initilization()
     {
         console.log("ProjectList not found: Creating default project");
         addProject("New Project");
-        currentProject = projectList[0];
+        selectedProject = projectList[0];
     }
 }
 
@@ -93,38 +94,22 @@ function addProject(projectName)
 // This function will handle adding a card to the current selected project.
 function addCard(cardName)
 {
-    console.log(`Card added to ${currentProject.name} with id#${currentProject.id} and card list of ${currentProject.cardList}`);
-    console.log(currentProject.cardList);
+    console.log(`Card added to ${selectedProject.name} with id#${selectedProject.id} and card list of ${selectedProject.cardList}`);
+    console.log(selectedProject.cardList);
 
     // Generate a new id for the new card
     let newID = generateID();
     
     // Create a new card and add it to the currentProject cardList
     let newCard = new Card(newID, cardName, "N/A", "0/0/00", "Low");
-    currentProject.cardList.push(newCard);
+    selectedProject.cardList.push(newCard);
 
     // Update projectList with the new changes to the current project
     // and save it to local storage
     updateProjectList();
 
     // Then we go ahead and call renderCards
-    pubsub.publish("renderCards", currentProject.cardList);
-}
-
-// This function will handle adding a new checkbox to the selected card checklist
-function addCheckbox()
-{
-    // console.log("Adding new checkbox to checklist");
-
-    // // Add a new checkbox item to the selectCard checkList
-    // selectedCard.checkList.push({state: 0, text: "Test"});
-
-    // // Update the currentProject cardList with the selectCard changes
-    // let index = currentProject.cardList.indexOf(currentProject.cardList.find((element) => element.id === selectedCard.id ? element : null));
-    // currentProject.cardList.splice(index, 1, selectedCard);
-
-    // // Update projectlist with new changes
-    // updateProjectList();
+    pubsub.publish("renderCards", selectedProject.cardList);
 }
 
 // This function handles what happens when the user opens a project 
@@ -135,10 +120,10 @@ function openProject(projectID)
 
     // We make sure to set the currenProject to the project we opened.
     setCurrentProject(projectID);
-    console.log("Current Project:" + currentProject);
+    console.log("Current Project:" + selectedProject);
 
     // We call renderCards so we can display the currentProject's cardList
-    pubsub.publish("renderCards", currentProject.cardList);
+    pubsub.publish("renderCards", selectedProject.cardList);
 }
 
 // This function handles what happens when the user clicks
@@ -162,8 +147,21 @@ function viewCard(card)
 function setCurrentProject(projectID)
 {
     console.log(`Finding project: ${projectID} in the projectList.`);
-    currentProject = projectList.find((element) => element.id === projectID ? element : null);
-    console.log(currentProject);
+    selectedProject = projectList.find((element) => element.id === projectID ? element : null);
+    console.log(selectedProject);
+}
+
+// This function allows editing of the current selected project header
+// We have to do this because the projectManager.js hold all the current variables we need.
+// This means that we need to go through this script and pass the info to the render.
+// So the flow is index.js --> projectManager --> Render ---> Then loop back to projectManager if need be.
+function editProjectHeader()
+{
+    if(selectedProject)
+    {
+        console.log(`Editing the current project header ${selectedProject.title}`);
+        pubsub.publish("renderEditProjectHeader", selectedProject.name);
+    }   
 }
 
 // This function handles what happens when the user wants to 
@@ -182,8 +180,8 @@ function editSelectedCard()
 function updateProjectList()
 {
     // Apply changes to the currentProject to the projectList
-    let index = projectList.indexOf(projectList.find((element) => element.id === currentProject.id ? element : null));
-    projectList.splice(index, 1, currentProject);
+    let index = projectList.indexOf(projectList.find((element) => element.id === selectedProject.id ? element : null));
+    projectList.splice(index, 1, selectedProject);
 
     // Save/upload changes to the localStorage.
     localStorage.setItem("projectList", JSON.stringify(projectList));
@@ -236,15 +234,15 @@ function applyCardEdit(data)
 
 
     // Apply changes to the selectedCard and update the currentProject cardList
-    let index = currentProject.cardList.indexOf(currentProject.cardList.find((element) => element.id === selectedCard.id ? element : null));
-    currentProject.cardList.splice(index, 1, selectedCard);
+    let index = selectedProject.cardList.indexOf(selectedProject.cardList.find((element) => element.id === selectedCard.id ? element : null));
+    selectedProject.cardList.splice(index, 1, selectedCard);
 
     // Apply changes to the projectList because we made changes to the current project
     updateProjectList();
 
     // Update the render of the current project card list
     // Update the card display with the new updated card data.
-    pubsub.publish("renderCards", currentProject.cardList);
+    pubsub.publish("renderCards", selectedProject.cardList);
     pubsub.publish("renderCardDisplay", selectedCard);
 }
 
@@ -254,11 +252,29 @@ function applyChecklistChange(data)
 {
     console.log(`Applying checklist changes to card ${data.id}`);
     // Apply changes to the selectedCard and update the currentProject cardList
-    let index = currentProject.cardList.indexOf(currentProject.cardList.find((element) => element.id === selectedCard.id ? element : null));
-    currentProject.cardList.splice(index, 1, selectedCard);
+    let index = selectedProject.cardList.indexOf(selectedProject.cardList.find((element) => element.id === selectedCard.id ? element : null));
+    selectedProject.cardList.splice(index, 1, selectedCard);
 
     // Apply changes to the projectList because we made changes to the current project
     updateProjectList();
+}
+
+// This function handles the changes made to the project header
+// For now this updates the project name to whatever the name was in the data
+function applyProjectHeaderChange(data)
+{
+    console.log(`Applying project header changes to project ${selectedProject.id}`);
+
+    // Update the selected project name with the changes
+    selectedProject.name = data.get('editProjectHeaderInput');
+
+    // Apply these changes to the localStorage
+    updateProjectList();
+
+    // Render the project box header with the new changes
+    // Then we need to re-render the projectList to update with the new project name
+    pubsub.publish("renderProjectHeader", selectedProject.name);
+    pubsub.publish("renderProjects", projectList);
 }
 
 // This function handles deleting a project from the projectList
