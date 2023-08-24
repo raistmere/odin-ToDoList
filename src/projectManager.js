@@ -196,29 +196,41 @@ function applyCardEdit(data)
     console.log("Applying edit changes to the selected card");
     console.log(`New card title: ${data.get("editCardTitle")}`);
 
-    // We make sure to apply the new changes to the selectedCard
-    // Apply Card title changes
+    // We make sure to apply the new changes to the selectedCard //
+    // Apply Card title changes //
     selectedCard.title = data.get("editCardTitle");
-    // Apply Card description changes
+    // Apply Card description changes //
     selectedCard.desc = data.get("editCardDesc");
-    // Apply Card due date changes
+    // Apply Card due date changes //
     selectedCard.due = data.get("editCardDue");
-    // Apply Card priority changes
+    // Apply Card priority changes // 
     selectedCard.priority = data.get("editCardPriority");
-    // Apply Card checklist changes
-    for(const element of data)
-    {
-        console.log(element);
-    }
+    // Apply Card checklist changes // 
+    // We use the dataChecklist to match the selectCard checklist and update the data.
+    // If there are any new checkboxes that were added, we want to go ahead and create a new element
+    // in the selectCard checklist array.
+    let dataChecklist = data.getAll("editCheckbox");
     for(let i = 0; i < Number(data.get("checklistCount")); i++)
     {
         if(selectedCard.checkList[i])
         {
-            selectedCard.checkList[i].text = data.get(`editCheckbox${i}`);
+            selectedCard.checkList[i].text = dataChecklist[i];
         }
         else
         {
-            selectedCard.checkList.push({state: 0, text: data.get(`editCheckbox${i}`)});
+            console.log(dataChecklist[i]);
+            selectedCard.checkList.push({state: 0, text: dataChecklist[i]});
+        }
+    }
+    //We also make sure that if the dataChecklist is less than the selectedCard checklist
+    // we would want to pop the selectedCard checklist to match that of the dataChecklist.
+    // This means that the user must have removed some checkboxes.
+    if(dataChecklist.length < selectedCard.checkList.length)
+    {
+        for(let i = selectedCard.checkList.length; i > dataChecklist.length; i--)
+        {
+            console.log(i);
+            selectedCard.checkList.pop();
         }
     }
 

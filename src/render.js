@@ -124,26 +124,55 @@ function renderNewCheckbox()
 {
     // Get the last checkbox number and divide by 2 (because of label and input element)
     // We want to use this number so we can create id/name with the correct checkbox#
-    let i = (editCardChecklist.childElementCount / 2);
+    let i = Number(editCardChecklistCount.getAttribute('value'));
 
     // Create a new element that will represent the checkbox label for editing
-    let newElement = document.createElement('input');
-    newElement.classList.add('editCheckbox');
-    newElement.setAttribute("id", `editCheckbox${i}`);
-    newElement.setAttribute("name", `editCheckbox${i}`);
+    let newInput = document.createElement('input');
+    newInput.classList.add('editCheckbox');
+    newInput.setAttribute("id", `editCheckbox${i}`);
+    newInput.setAttribute("name", `editCheckbox`);
 
     // Create a new label for that text input element
-    let newText = document.createElement('label');
-    newText.setAttribute('for', `editCheckbox${i}`);
-    newText.textContent = `Checkbox #${i+1}`;
+    let newLabel = document.createElement('label');
+    newLabel.setAttribute('for', `editCheckbox${i}`);
+    newLabel.textContent = `Checkbox #${i + 1}`;
+
+    // Create a new remove button that will handle removing the checkbox
+    let newRemoveButton = document.createElement('button');
+    newRemoveButton.setAttribute("type", 'button');
+    // newRemoveButton.setAttribute('id', `editCheckbox${i}`)
+    newRemoveButton.textContent = "[ x ]";
+    // Add an eventlistener when the button is clicked that will remove the
+    // checkbox from the checklist
+    newRemoveButton.addEventListener('click', function(e)
+    {
+        console.log(`editCheckbox${i} remove button has been clicked`);
+
+        // We want to remove all elements that are part of the checkbox.
+        editCardChecklist.removeChild(newLabel)
+        editCardChecklist.removeChild(newInput);
+        editCardChecklist.removeChild(newRemoveButton);
+
+        // Make sure we update the hidden element checklistCount to keep track of
+        // the new total of elements in the checklist. We go ahead and just subtract 1 to the total.
+        editCardChecklistCount.setAttribute('value', (Number(editCardChecklistCount.getAttribute('value')) - 1));
+    })
 
     // Append it to the editCardChecklist for display
-    editCardChecklist.appendChild(newText);
-    editCardChecklist.appendChild(newElement);
+    editCardChecklist.appendChild(newLabel);
+    editCardChecklist.appendChild(newInput);
+    editCardChecklist.append(newRemoveButton);
 
     // Make sure we update the hidden element checklistCount to keep track of
     // the new total of elements in the checklist. We go ahead and just add 1 to the total.
     editCardChecklistCount.setAttribute('value', (Number(editCardChecklistCount.getAttribute('value')) + 1));
+}
+
+// This function handles removing a checkbox element by removing the render of the element
+// to the editCardDisplay element
+function removeCheckboxRender()
+{
+    console.log("Removing checkbox render");
 }
 
 // This function handles rendering the selected card to the card display element.
@@ -241,6 +270,7 @@ function renderEditCardDisplay(card)
             }
         }
 
+        // Render checkbox checklist in edit form
         // This lets us change the label text for each checkbox in the checklist
         // by converting all the labels into input type text elements.
         // First we clear the editCardChecklist div element so we don't run into duplicates
@@ -250,20 +280,42 @@ function renderEditCardDisplay(card)
         for(let i = 0; i < card.checkList.length; i++)
         {
             // Create a new element that will represent the checkbox label for editing
-            let newElement = document.createElement('input');
-            newElement.classList.add('editCheckbox');
-            newElement.setAttribute("id", `editCheckbox${i}`);
-            newElement.setAttribute("name", `editCheckbox${i}`);
-            newElement.value = card.checkList[i].text;
+            let newInput = document.createElement('input');
+            newInput.classList.add('editCheckbox');
+            newInput.setAttribute("id", `editCheckbox${i}`);
+            newInput.setAttribute("name", `editCheckbox`);
+            newInput.value = card.checkList[i].text;
 
             // Create a new label for that text input element
-            let newText = document.createElement('label');
-            newText.setAttribute('for', `editCheckbox${i}`);
-            newText.textContent = `Checkbox #${i+1}`;
+            let newLabel = document.createElement('label');
+            newLabel.setAttribute('for', `editCheckbox${i}`);
+            newLabel.textContent = `Checkbox #${i+1}`;
+
+            // Create a new remove button that will handle removing the checkbox
+            let newRemoveButton = document.createElement('button');
+            newRemoveButton.setAttribute("type", 'button');
+            // newRemoveButton.setAttribute('id', `editCheckbox${i}`)
+            newRemoveButton.textContent = "[ x ]";
+            // Add an eventlistener when the button is clicked that will remove the
+            // checkbox from the checklist
+            newRemoveButton.addEventListener('click', function(e)
+            {
+                console.log(`editCheckbox${i} remove button has been clicked`);
+
+                // We want to remove all elements that are part of the checkbox.
+                editCardChecklist.removeChild(newLabel)
+                editCardChecklist.removeChild(newInput);
+                editCardChecklist.removeChild(newRemoveButton);
+
+                // Make sure we update the hidden element checklistCount to keep track of
+                // the new total of elements in the checklist. We go ahead and just subtract 1 to the total.
+                editCardChecklistCount.setAttribute('value', (Number(editCardChecklistCount.getAttribute('value')) - 1));
+            })
 
             // Append it to the editCardChecklist for display
-            editCardChecklist.appendChild(newText);
-            editCardChecklist.appendChild(newElement);
+            editCardChecklist.appendChild(newLabel);
+            editCardChecklist.appendChild(newInput);
+            editCardChecklist.appendChild(newRemoveButton);
 
             // Add to checkbox count
             checklistCount++;
