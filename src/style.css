@@ -190,13 +190,17 @@
     font-size: 25px;
 }
 
-.deckButtons
+.projectBoxButtons
 {
     /* General properties */
     padding: 10px;
+
+    /* Flex properties */
+    display: flex;
+    gap: 10px;
 }
 
-.createCardButton
+.createCardButton, .deleteCardButton
 {
     /* General properties */
     padding: 5px;

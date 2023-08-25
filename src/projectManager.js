@@ -20,6 +20,7 @@ pubsub.subscribe("applyChecklistChange", applyChecklistChange);
 pubsub.subscribe("editProjectHeader", editProjectHeader);
 pubsub.subscribe("applyProjectHeaderEdit", applyProjectHeaderChange);
 pubsub.subscribe("deleteProject", deleteProject);
+pubsub.subscribe("deleteCard", deleteCard);
 
 
 // This function handles initilization for this script
@@ -310,6 +311,40 @@ function deleteProject()
             pubsub.publish("renderCards", null);
             pubsub.publish("renderCardDisplay", null);
         }
+    }
+}
+
+// This function handles deleting a card from the selected project cardlist
+function deleteCard()
+{
+    if(selectedCard)
+    {
+        console.log("Deleting selected card from selected project");
+
+        // Delete selected card form the selectedProject cardlist
+        let index = selectedProject.cardList.indexOf(selectedProject.cardList.find((element) => element.id === selectedCard.id ? element : null));
+        selectedProject.cardList.splice(index, 1);
+
+        // Update the localStorage with the new projectList changes.
+        localStorage.setItem("projectList", JSON.stringify(projectList));
+
+        // We want to go ahead and also re-render the card list and set it to the first element
+        // in the projectList. If there is no element then it should be blank.
+        selectedCard = selectedProject.cardList[0];
+        if(selectedProject)
+        {
+            pubsub.publish("renderCards", selectedProject.cardList);
+            pubsub.publish("renderCardDisplay", null);
+        }
+        else
+        {
+            pubsub.publish("renderCards", null);
+            pubsub.publish("renderCardDisplay", null);
+        }
+    }
+    else
+    {
+        console.log("Selected card does not exist");
     }
 }
 

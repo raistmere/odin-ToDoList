@@ -3,7 +3,5 @@ Goale: For this project I want to focus on what I learned in the pass lessons:
     2. Avoid "tightly coupled" code. Focused on Loosely coupled strategies.
 
 Tasks Left:
-    1. Delete projects from the projectlist
-    2. Delete cards from the selected project
-    4. Cancel project header edit mode
-    3. Finish up the css style
+    - Cancel project header edit mode
+    - Finish up the css style

@@ -24,6 +24,7 @@ const newCheckboxButton = document.querySelector('.newCheckboxButton');
 const applyEditProjectHeaderButton = document.querySelector('.applyEditProjectHeaderButton');
 const editProjectBoxHeaderForm = document.querySelector('.editProjectBoxHeaderForm');
 const deleteProjectButton = document.querySelector('.deleteProjectButton');
+const deleteCardButton = document.querySelector('.deleteCardButton');
 
 // 
 // Event Listeners\\
@@ -98,6 +99,11 @@ deleteProjectButton.addEventListener('click', function(e)
     console.log("Delete project button pressed");
 
     pubsub.publish("deleteProject", null);
+});
+deleteCardButton.addEventListener('click', function(e)
+{
+    console.log("Delete card button pressed");
+    pubsub.publish("deleteCard", null);
 });
 
 
