@@ -19,6 +19,7 @@ pubsub.subscribe("applyEdit",applyCardEdit);
 pubsub.subscribe("applyChecklistChange", applyChecklistChange);
 pubsub.subscribe("editProjectHeader", editProjectHeader);
 pubsub.subscribe("applyProjectHeaderEdit", applyProjectHeaderChange);
+pubsub.subscribe("deleteProject", deleteProject);
 
 
 // This function handles initilization for this script
@@ -281,7 +282,35 @@ function applyProjectHeaderChange(data)
 // Pubsub subcription when the delete project button is clicked
 function deleteProject()
 {
+    // We want to make sure a selected project exists
+    if(selectedProject)
+    {
+        console.log("Deleting current selected project");
 
+        // We want to go ahead and find the project in and projectList and delete it.
+        let index = projectList.indexOf(projectList.find((element) => element.id === selectedProject.id ? element : null));
+        projectList.splice(index, 1);
+
+        // Update the localStorage with the new projectList changes.
+        localStorage.setItem("projectList", JSON.stringify(projectList));
+
+        // Refresh the render of the projectList to update the correct projects avaliable
+        pubsub.publish("renderProjects", projectList);
+
+        // We want to go ahead and also re-render the card list and set it to the first element
+        // in the projectList. If there is no element then it should be blank.
+        selectedProject = projectList[0];
+        if(selectedProject)
+        {
+            pubsub.publish("renderCards", selectedProject.cardList);
+            pubsub.publish("renderCardDisplay", null);
+        }
+        else
+        {
+            pubsub.publish("renderCards", null);
+            pubsub.publish("renderCardDisplay", null);
+        }
+    }
 }
 
 // This function handles generating a basic id for any object that needs it

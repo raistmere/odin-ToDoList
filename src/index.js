@@ -23,6 +23,7 @@ const cancelEditButton = document.querySelector('.cancelEditButton');
 const newCheckboxButton = document.querySelector('.newCheckboxButton');
 const applyEditProjectHeaderButton = document.querySelector('.applyEditProjectHeaderButton');
 const editProjectBoxHeaderForm = document.querySelector('.editProjectBoxHeaderForm');
+const deleteProjectButton = document.querySelector('.deleteProjectButton');
 
 // 
 // Event Listeners\\
@@ -91,6 +92,12 @@ applyEditProjectHeaderButton.addEventListener('click', function(e)
     const data = new FormData(editProjectBoxHeaderForm);
 
     pubsub.publish("applyProjectHeaderEdit", data);
+});
+deleteProjectButton.addEventListener('click', function(e)
+{
+    console.log("Delete project button pressed");
+
+    pubsub.publish("deleteProject", null);
 });
 
 

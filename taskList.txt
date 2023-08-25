@@ -2,5 +2,8 @@ Goale: For this project I want to focus on what I learned in the pass lessons:
     1. Apply the "Single Responsibility Principle".
     2. Avoid "tightly coupled" code. Focused on Loosely coupled strategies.
 
-Tasks:
-    1.
+Tasks Left:
+    1. Delete projects from the projectlist
+    2. Delete cards from the selected project
+    4. Cancel project header edit mode
+    3. Finish up the css style

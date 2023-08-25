@@ -94,20 +94,25 @@
     font-size: 25px;
 }
 
-.projectListCreateBox
+.projectListButtons
 {
     /* General properties */
     justify-content: center;
-    padding: 10px;
+    align-items: center;
+    padding: 5px;
 
     /* Flex properties */
     display: flex;
+    flex-direction: column;
+    gap: 1px;
 }
 
 .createProjectButton
 {
     /* General properties */
-    padding: 5px;
+    padding: 1px;
+    background-color: rgb(123, 252, 123);
+
     /* Text properties */
     font-size: 18px;
     text-align: center;
@@ -118,6 +123,19 @@
 
     /* Main flex properties */
     display: flex;
+}
+
+.deleteProjectButton
+{
+    /* General properties */
+    padding: 1px;
+    background-color: rgb(255, 119, 119);
+
+    /* Flex properties */
+    display: flex;
+
+    /* Text Properties */
+    font-size: 10px;
 }
 
 .projectsListBox

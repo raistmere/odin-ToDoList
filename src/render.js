@@ -120,7 +120,7 @@ function renderCardList(cardList)
     }
     else
     {
-        console.log("ERROR: cardList is not of type 'Array'");
+        console.log("ERROR: cardList does not exist");
     }
 }
 
@@ -187,70 +187,78 @@ function removeCheckboxRender()
 // It will render all the card information to the card display.
 function renderCardDisplay(card)
 {
-    console.log(`Rendering "${card.title}" to card display`);
-
-    // Render card title to the display
-    normCardTitle.textContent = card.title;
-
-    // Render card description to the display
-    normCardDesc.textContent = card.desc;
-
-    // Render card due date to the display
-    normCardDue.textContent = card.due;
-
-    // Render card priority to the display
-    normCardPriority.textContent = card.priority;
-
-    // Before we begin, we will clear the checklist to prevent any duplicates.
-    // or elements that aren't suppose to be in the checklist.
-    normCardChecklist.innerHTML = "";
-    // Render card checklist to the display
-    for(let i = 0; i < card.checkList.length; i++)
+    // Check if card actually exists. If it does not then we don't have a card to display.
+    if(card)
     {
-        // We make sure to go through the checklist array and create a new checkbox
-        // for each element in the array till we have the full checklist in the display.
+        console.log(`Rendering "${card.title}" to card display`);
 
-        // Create a new checkbox div
-        let newDiv = document.createElement('div');
-        newDiv.classList.add("Checkbox");
+        // Render card title to the display
+        normCardTitle.textContent = card.title;
 
-        // Create a new checkbox input element
-        let newCheckbox = document.createElement('input');
-        newCheckbox.setAttribute('type', 'checkbox');
-        newCheckbox.setAttribute('id',`cb${i+1}`);
-        newCheckbox.checked = card.checkList[i].state;
+        // Render card description to the display
+        normCardDesc.textContent = card.desc;
 
-        // Make sure to add an eventlistener when there is a change in the checkbox
-        newCheckbox.addEventListener('click', function(e)
+        // Render card due date to the display
+        normCardDue.textContent = card.due;
+
+        // Render card priority to the display
+        normCardPriority.textContent = card.priority;
+
+        // Before we begin, we will clear the checklist to prevent any duplicates.
+        // or elements that aren't suppose to be in the checklist.
+        normCardChecklist.innerHTML = "";
+        // Render card checklist to the display
+        for(let i = 0; i < card.checkList.length; i++)
         {
-            console.log(`checkbox ${newCheckbox.getAttribute('id')} state has changed`);
-            console.log(card.checkList[i].state);
-            card.checkList[i].state === 0 ? card.checkList[i].state = 1 : card.checkList[i].state = 0;
-            console.log(card.checkList[i].state);
+            // We make sure to go through the checklist array and create a new checkbox
+            // for each element in the array till we have the full checklist in the display.
 
-            // Pubsub call when this happens to update the card checklist.
-            pubsub.publish("applyChecklistChange", card);
-        })
+            // Create a new checkbox div
+            let newDiv = document.createElement('div');
+            newDiv.classList.add("Checkbox");
 
-        // Create a new label for that checkbox input element
-        let newText = document.createElement('label');
-        newText.setAttribute('for', `cb${i+1}`);
-        newText.textContent = card.checkList[i].text;
+            // Create a new checkbox input element
+            let newCheckbox = document.createElement('input');
+            newCheckbox.setAttribute('type', 'checkbox');
+            newCheckbox.setAttribute('id',`cb${i+1}`);
+            newCheckbox.checked = card.checkList[i].state;
 
-        // Append both checkbox element and text element to div
-        newDiv.appendChild(newCheckbox);
-        newDiv.appendChild(newText);
+            // Make sure to add an eventlistener when there is a change in the checkbox
+            newCheckbox.addEventListener('click', function(e)
+            {
+                console.log(`checkbox ${newCheckbox.getAttribute('id')} state has changed`);
+                console.log(card.checkList[i].state);
+                card.checkList[i].state === 0 ? card.checkList[i].state = 1 : card.checkList[i].state = 0;
+                console.log(card.checkList[i].state);
 
-        // Append the div to the checklist element
-        normCardChecklist.appendChild(newDiv);
+                // Pubsub call when this happens to update the card checklist.
+                pubsub.publish("applyChecklistChange", card);
+            })
+
+            // Create a new label for that checkbox input element
+            let newText = document.createElement('label');
+            newText.setAttribute('for', `cb${i+1}`);
+            newText.textContent = card.checkList[i].text;
+
+            // Append both checkbox element and text element to div
+            newDiv.appendChild(newCheckbox);
+            newDiv.appendChild(newText);
+
+            // Append the div to the checklist element
+            normCardChecklist.appendChild(newDiv);
+        }
+
+
+
+        // We make sure that the normal card display is active
+        // and not the edit card display.
+        editCardDisplayBox.classList.add('hidden');
+        normalCardDisplayBox.classList.remove('hidden');
     }
-
-
-
-    // We make sure that the normal card display is active
-    // and not the edit card display.
-    editCardDisplayBox.classList.add('hidden');
-    normalCardDisplayBox.classList.remove('hidden');
+    else
+    {
+        normalCardDisplayBox.classList.add('hidden');
+    }
 }
 
 // This function handles rendering the edit form for the currently selected card.
